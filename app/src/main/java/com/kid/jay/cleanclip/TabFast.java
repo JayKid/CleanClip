@@ -27,22 +27,17 @@ public class TabFast extends Activity {
 
         ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clipData = clipboard.getPrimaryClip();
-        String clipboardURL = String.valueOf(clipData.getItemAt(0).getText());
-        cleanUrl = stripQueryParameters(clipboardURL);
+        if (clipData != null && clipData.getItemAt(0) != null) {
+            String clipboardURL = String.valueOf(clipData.getItemAt(0).getText());
+            cleanUrl = stripQueryParameters(clipboardURL);
 
-        if (!cleanUrl.isEmpty()) {
-            TextView clipboardLinkLabel = findViewById(R.id.clipboardLinkLabel);
-            clipboardLinkLabel.setText(cleanUrl);
+            if (!cleanUrl.isEmpty()) {
+                TextView clipboardLinkLabel = findViewById(R.id.clipboardLinkLabel);
+                clipboardLinkLabel.setText(cleanUrl);
+            }
         }
 
-        FloatingActionButton shareButton = findViewById(R.id.fastShareButton);
-        shareButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                if (!cleanUrl.isEmpty()) {
-                    startShareUrl(cleanUrl);
-                }
-            }
-        });
+        bindFloatingButtonAction();
     }
 
     private String stripQueryParameters (String urlWithPotentialQueryParams) {
@@ -65,6 +60,17 @@ public class TabFast extends Activity {
         sendIntent.putExtra(Intent.EXTRA_TEXT, url);
         sendIntent.setType("text/plain");
         startActivity(sendIntent);
+    }
+
+    private void bindFloatingButtonAction() {
+        FloatingActionButton shareButton = findViewById(R.id.fastShareButton);
+        shareButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (!cleanUrl.isEmpty()) {
+                    startShareUrl(cleanUrl);
+                }
+            }
+        });
     }
 
 }
