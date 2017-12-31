@@ -7,14 +7,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.util.JsonReader;
+import android.util.JsonWriter;
 import android.view.View;
 import android.widget.TextView;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TabFast extends Activity {
 
@@ -67,10 +73,67 @@ public class TabFast extends Activity {
         shareButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (!cleanUrl.isEmpty()) {
+                    writeToJSON();
+                    readFromFile();
                     startShareUrl(cleanUrl);
                 }
             }
         });
     }
 
+    private void writeToJSON() {
+
+        try {
+            File file = new File(getFilesDir(), "history.json");
+            FileWriter fileWriter = new FileWriter(file);
+            JsonWriter writer = new JsonWriter(fileWriter);
+            writer.setIndent("  ");
+            writer.beginArray();
+
+            for (int i = 0; i < 1; ++i) {
+                writer.beginObject();
+                writer.name("url").value(cleanUrl);
+                writer.endObject();
+            }
+            writer.endArray();
+            writer.close();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void readFromFile() {
+        try {
+            File file = new File(getFilesDir(),"history.json");
+            FileReader fileReader = new FileReader(file);
+            JsonReader reader = new JsonReader(fileReader);
+            List<String> urls = new ArrayList<>();
+
+            reader.beginArray();
+            while (reader.hasNext()) {
+                String url = null;
+                reader.beginObject();
+                while (reader.hasNext()) {
+                    String name = reader.nextName();
+                    if (name.equals("url")) {
+                        url = reader.nextString();
+                    } else {
+                        reader.skipValue();
+                    }
+                }
+                reader.endObject();
+
+                if (url != null) {
+                    urls.add(url);
+                }
+            }
+            reader.endArray();
+        }
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
