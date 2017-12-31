@@ -43,7 +43,7 @@ public class Storage {
         }
     }
 
-    public void fetchSharedItemsFromFileSystem() {
+    public List<String> fetchSharedItemsFromFileSystem() {
         try {
             File file = new File(context.getFilesDir(),"history.json");
             FileReader fileReader = new FileReader(file);
@@ -69,11 +69,13 @@ public class Storage {
                 }
             }
             reader.endArray();
+            return urls;
         }
         catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return null;
     }
 }

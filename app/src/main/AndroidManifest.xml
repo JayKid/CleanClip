@@ -19,6 +19,10 @@
         <activity
             android:name=".TabFast"
             android:label="@string/title_activity_tab_fast"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".TabHistory"
+            android:label="@string/title_activity_tab_history"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

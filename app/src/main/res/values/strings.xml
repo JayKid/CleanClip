@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">CleanClip</string>
     <string name="title_activity_tab_fast">TabFast</string>
+    <string name="title_activity_tab_history">TabHistory</string>
 </resources>
