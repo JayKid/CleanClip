@@ -40,7 +40,7 @@ public class TabFast extends Activity {
         bindFloatingButtonAction();
     }
 
-    private String stripQueryParameters (String urlWithPotentialQueryParams) {
+    private String stripQueryParameters(String urlWithPotentialQueryParams) {
         try {
             URI sourceUri = new URI(urlWithPotentialQueryParams);
             return new URI(sourceUri.getScheme(),
@@ -74,8 +74,4 @@ public class TabFast extends Activity {
             }
         });
     }
-
-
-
-
 }
