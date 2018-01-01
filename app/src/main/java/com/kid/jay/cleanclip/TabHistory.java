@@ -35,7 +35,7 @@ public class TabHistory extends Activity implements AdapterView.OnItemClickListe
         if (sharedItems == null) {
             sharedItems = placeholderContents;
         }
-        arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, sharedItems);
+        arrayAdapter = new ArrayAdapter<>(this, R.layout.history_list_item, sharedItems);
 
         listView.setAdapter(arrayAdapter);
         listView.setOnItemClickListener(this);
@@ -43,7 +43,5 @@ public class TabHistory extends Activity implements AdapterView.OnItemClickListe
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        TextView tv = (TextView)view;
-        Toast.makeText(getApplicationContext(),"You Clicked "+tv.getText()+" position "+i,Toast.LENGTH_SHORT).show();
     }
 }
