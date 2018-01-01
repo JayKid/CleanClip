@@ -20,8 +20,7 @@ public class Storage {
         this.context = context;
     }
 
-
-    public void addSharedItem(String url) {
+    public void save(List<String> urls) {
 
         try {
             File file = new File(context.getFilesDir(), "history.json");
@@ -30,7 +29,7 @@ public class Storage {
             writer.setIndent("  ");
             writer.beginArray();
 
-            for (int i = 0; i < 1; ++i) {
+            for (String url : urls) {
                 writer.beginObject();
                 writer.name("url").value(url);
                 writer.endObject();

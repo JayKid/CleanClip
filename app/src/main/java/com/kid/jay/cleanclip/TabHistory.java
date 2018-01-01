@@ -20,7 +20,7 @@ public class TabHistory extends Activity implements AdapterView.OnItemClickListe
 
     ListView listView;
     ArrayAdapter<String> arrayAdapter;
-    Storage storage;
+    SharedItemsStore store;
     List<String> placeholderContents = Arrays.asList("You", "Never", "Shared", "Anything");
 
     @Override
@@ -28,10 +28,10 @@ public class TabHistory extends Activity implements AdapterView.OnItemClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab_history);
 
-        storage = new Storage(this);
+        store = SharedItemsStore.getInstance();
         listView = findViewById(R.id.historyListView);
 
-        List<String> sharedItems = storage.fetchSharedItemsFromFileSystem();
+        List<String> sharedItems = store.getSharedItems();
         if (sharedItems == null) {
             sharedItems = placeholderContents;
         }

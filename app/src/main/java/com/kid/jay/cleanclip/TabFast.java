@@ -16,14 +16,15 @@ import java.net.URISyntaxException;
 public class TabFast extends Activity {
 
     String cleanUrl = "";
-    Storage storage;
+    SharedItemsStore store;
+    Boolean needsPersisting = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab_fast);
 
-        storage = new Storage(this);
+        store = SharedItemsStore.getInstance();
 
         ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clipData = clipboard.getPrimaryClip();
@@ -67,11 +68,20 @@ public class TabFast extends Activity {
         shareButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (!cleanUrl.isEmpty()) {
-                    storage.addSharedItem(cleanUrl);
-                    storage.fetchSharedItemsFromFileSystem();
+                    store.addSharedItem(cleanUrl);
+                    needsPersisting = true;
                     startShareUrl(cleanUrl);
                 }
             }
         });
+    }
+
+    @Override
+    protected void onPause() {
+        if (needsPersisting) {
+            store.persistSharedItems();
+            needsPersisting = false;
+        }
+        super.onPause();
     }
 }

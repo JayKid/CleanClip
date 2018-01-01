@@ -17,6 +17,9 @@ public class MainActivity extends ActivityGroup {
         tabHost = findViewById(R.id.tabHost);
         tabHost.setup(this.getLocalActivityManager());
 
+        SharedItemsStore store = SharedItemsStore.getInstance();
+        store.initialize(this);
+
         TabHost.TabSpec spec = tabHost.newTabSpec("TabFast");
         spec.setContent(new Intent(this,TabFast.class));
         spec.setIndicator("Clipboard contents");
