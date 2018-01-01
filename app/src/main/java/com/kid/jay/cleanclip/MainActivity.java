@@ -17,15 +17,16 @@ public class MainActivity extends ActivityGroup {
         tabHost = findViewById(R.id.tabHost);
         tabHost.setup(this.getLocalActivityManager());
 
-        //Tab 1
+        SharedItemsStore store = SharedItemsStore.getInstance();
+        store.initialize(this);
+
         TabHost.TabSpec spec = tabHost.newTabSpec("TabFast");
         spec.setContent(new Intent(this,TabFast.class));
         spec.setIndicator("Clipboard contents");
         tabHost.addTab(spec);
 
-        //Tab 2
         spec = tabHost.newTabSpec("TabHistory");
-        spec.setContent(R.id.tab2);
+        spec.setContent(new Intent(this,TabHistory.class));
         spec.setIndicator("History");
         tabHost.addTab(spec);
     }
