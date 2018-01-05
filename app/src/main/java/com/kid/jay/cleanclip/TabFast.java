@@ -107,25 +107,47 @@ public class TabFast extends Activity {
 
             @Override
             public void onPos(SourceContent sourceContent, boolean b) {
-                ImageView linkImagePreview = findViewById(R.id.linkImagePreview);
-                TextView linkTitlePreview = findViewById(R.id.linkTitlePreview);
-                TextView linkDescriptionPreview = findViewById(R.id.linkDescriptionPreview);
-                if (sourceContent.getTitle() != null) {
-                    linkTitlePreview.setText(sourceContent.getTitle());
-                }
-                if (sourceContent.getDescription() != null) {
-                    linkDescriptionPreview.setText(sourceContent.getDescription());
-                }
-                List<String> images = sourceContent.getImages();
-                if (images != null && !images.isEmpty()) {
-                    String mainImageUrl = images.get(0);
-                    if (mainImageUrl != null) {
-                        Picasso.with(getApplicationContext()).load(mainImageUrl).into(linkImagePreview);
-                    }
-                }
+
+                WebInfo webInfo = extractWebsiteContents(sourceContent);
+                setPreviewFromExtractedContent(webInfo);
             }
         };
 
-        textCrawler.makePreview( linkPreviewCallback, url);
+        textCrawler.makePreview(linkPreviewCallback, url);
+    }
+
+    private void setPreviewFromExtractedContent(WebInfo webInfo) {
+
+        ImageView linkImagePreview = findViewById(R.id.linkImagePreview);
+        TextView linkTitlePreview = findViewById(R.id.linkTitlePreview);
+        TextView linkDescriptionPreview = findViewById(R.id.linkDescriptionPreview);
+
+        linkTitlePreview.setText(webInfo.getTitle());
+        linkDescriptionPreview.setText(webInfo.getDescription());
+        Picasso.with(getApplicationContext()).load(webInfo.getMainImageURL()).into(linkImagePreview);
+    }
+
+    private WebInfo extractWebsiteContents(SourceContent sourceContent) {
+
+        String title = "";
+        String description = "";
+        String mainImageURL = "http://imageog.flaticon.com/icons/png/512/36/36601.png";
+
+        if (sourceContent.getTitle() != null) {
+            title = sourceContent.getTitle();
+        }
+        if (sourceContent.getDescription() != null) {
+            title = sourceContent.getDescription();
+        }
+
+        List<String> images = sourceContent.getImages();
+        if (images != null && !images.isEmpty()) {
+            String firstImageURL = images.get(0);
+            if (firstImageURL != null) {
+                mainImageURL = firstImageURL;
+            }
+        }
+
+        return new WebInfo(title, description, mainImageURL);
     }
 }
