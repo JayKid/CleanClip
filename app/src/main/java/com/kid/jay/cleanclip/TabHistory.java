@@ -32,7 +32,7 @@ public class TabHistory extends Activity implements AdapterView.OnItemClickListe
         listView = findViewById(R.id.historyListView);
 
         List<String> sharedItems = store.getSharedItems();
-        if (sharedItems == null) {
+        if (sharedItems.isEmpty()) {
             sharedItems = placeholderContents;
         }
         arrayAdapter = new ArrayAdapter<>(this, R.layout.history_list_item, sharedItems);

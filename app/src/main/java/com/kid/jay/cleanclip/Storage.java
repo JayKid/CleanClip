@@ -43,38 +43,40 @@ public class Storage {
     }
 
     public List<String> fetchSharedItemsFromFileSystem() {
+        List<String> urls = new ArrayList<>();
+
         try {
             File file = new File(context.getFilesDir(),"history.json");
-            FileReader fileReader = new FileReader(file);
-            JsonReader reader = new JsonReader(fileReader);
-            List<String> urls = new ArrayList<>();
+            if (file.exists()) {
+                FileReader fileReader = new FileReader(file);
+                JsonReader reader = new JsonReader(fileReader);
 
-            reader.beginArray();
-            while (reader.hasNext()) {
-                String url = null;
-                reader.beginObject();
+                reader.beginArray();
                 while (reader.hasNext()) {
-                    String name = reader.nextName();
-                    if (name.equals("url")) {
-                        url = reader.nextString();
-                    } else {
-                        reader.skipValue();
+                    String url = null;
+                    reader.beginObject();
+                    while (reader.hasNext()) {
+                        String name = reader.nextName();
+                        if (name.equals("url")) {
+                            url = reader.nextString();
+                        } else {
+                            reader.skipValue();
+                        }
+                    }
+                    reader.endObject();
+
+                    if (url != null) {
+                        urls.add(url);
                     }
                 }
-                reader.endObject();
-
-                if (url != null) {
-                    urls.add(url);
-                }
+                reader.endArray();
             }
-            reader.endArray();
-            return urls;
         }
         catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return null;
+        return urls;
     }
 }
