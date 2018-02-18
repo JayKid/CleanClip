@@ -25,7 +25,7 @@ public class TabFast extends Activity {
     SharedItemsStore store;
 
     // Currently displayed item
-    String cleanUrl = "";
+    String sharedItemURL = "";
     Boolean needsPersisting = false;
     WebInfo resolvedContents = null;
 
@@ -40,13 +40,26 @@ public class TabFast extends Activity {
         ClipData clipData = clipboard.getPrimaryClip();
         if (clipData != null && clipData.getItemAt(0) != null) {
             String clipboardURL = String.valueOf(clipData.getItemAt(0).getText());
-            cleanUrl = stripQueryParameters(clipboardURL);
+            sharedItemURL = stripQueryParameters(clipboardURL);
 
-            if (!cleanUrl.isEmpty()) {
-                startUnfurling(cleanUrl);
+            if (!sharedItemURL.isEmpty()) {
+
+                SharedItem sharedItemFromStorage = store.getSharedItemByURL(sharedItemURL);
+                if (sharedItemFromStorage != null) {
+                    if (sharedItemFromStorage.isResolved()) {
+                        resolvedContents = sharedItemFromStorage.getResolvedContents();
+                        setPreviewFromExtractedContent(resolvedContents);
+                    }
+                    else {
+                        startUnfurling(sharedItemURL);
+                    }
+                }
+                else {
+                    startUnfurling(sharedItemURL);
+                }
 
                 TextView clipboardLinkLabel = findViewById(R.id.clipboardLinkLabel);
-                clipboardLinkLabel.setText(cleanUrl);
+                clipboardLinkLabel.setText(sharedItemURL);
             }
         }
 
@@ -79,10 +92,10 @@ public class TabFast extends Activity {
         FloatingActionButton shareButton = findViewById(R.id.fastShareButton);
         shareButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if (!cleanUrl.isEmpty()) {
-                    store.addSharedItem(cleanUrl, resolvedContents == null, resolvedContents);
+                if (!sharedItemURL.isEmpty()) {
+                    store.addSharedItem(sharedItemURL, resolvedContents == null, resolvedContents);
                     needsPersisting = true;
-                    startShareUrl(cleanUrl);
+                    startShareUrl(sharedItemURL);
                 }
             }
         });
