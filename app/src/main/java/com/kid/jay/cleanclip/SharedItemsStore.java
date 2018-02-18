@@ -13,6 +13,7 @@ public class SharedItemsStore {
 
     public void initialize(Context context) {
         storage = new Storage(context);
+        sharedItems = storage.fetchSharedItemsFromFileSystem();
     }
 
     public static SharedItemsStore getInstance() {
@@ -20,13 +21,7 @@ public class SharedItemsStore {
     }
 
     public List<String> getSharedItems() {
-        if (!sharedItems.isEmpty()) {
-            return sharedItems;
-        }
-        else {
-            sharedItems = storage.fetchSharedItemsFromFileSystem();
-            return sharedItems;
-        }
+        return sharedItems;
     }
 
     public void addSharedItem(String sharedItem) {
