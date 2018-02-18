@@ -35,6 +35,12 @@ public class TabFast extends Activity {
         setContentView(R.layout.activity_tab_fast);
 
         store = SharedItemsStore.getInstance();
+        bindFloatingButtonAction();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
 
         ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clipData = clipboard.getPrimaryClip();
@@ -62,8 +68,6 @@ public class TabFast extends Activity {
                 clipboardLinkLabel.setText(sharedItemURL);
             }
         }
-
-        bindFloatingButtonAction();
     }
 
     private String stripQueryParameters(String urlWithPotentialQueryParams) {
