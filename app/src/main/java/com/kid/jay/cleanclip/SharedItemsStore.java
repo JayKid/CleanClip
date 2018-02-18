@@ -21,6 +21,17 @@ public class SharedItemsStore {
         return instance;
     }
 
+    public SharedItem getSharedItemByURL(String sharedItemURL) {
+        List<SharedItem> matched = sharedItems.stream()
+                .filter(item -> sharedItemURL.equals(item.getUrl()) )
+                .collect(Collectors.toList());
+
+        if (matched.size() == 1) {
+            return matched.get(0);
+        }
+        return null;
+    }
+
     public List<SharedItem> getSharedItems() {
         return sharedItems;
     }
@@ -46,16 +57,5 @@ public class SharedItemsStore {
 
     public void persistSharedItems() {
         storage.save(sharedItems);
-    }
-
-    public SharedItem getSharedItemByURL(String sharedItemURL) {
-        List<SharedItem> matched = sharedItems.stream()
-                .filter(item -> sharedItemURL.equals(item.getUrl()) )
-                .collect(Collectors.toList());
-
-        if (matched.size() == 1) {
-            return matched.get(0);
-        }
-        return null;
     }
 }

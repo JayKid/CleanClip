@@ -28,6 +28,11 @@ public class TabHistory extends Activity implements AdapterView.OnItemClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab_history);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
 
         store = SharedItemsStore.getInstance();
         listView = findViewById(R.id.historyListView);
