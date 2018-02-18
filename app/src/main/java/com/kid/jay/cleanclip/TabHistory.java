@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TabHistory extends Activity implements AdapterView.OnItemClickListener {
 
@@ -31,7 +32,7 @@ public class TabHistory extends Activity implements AdapterView.OnItemClickListe
         store = SharedItemsStore.getInstance();
         listView = findViewById(R.id.historyListView);
 
-        List<String> sharedItems = store.getSharedItems();
+        List<String> sharedItems = store.getSharedItems().stream().map(item -> item.getUrl()).collect(Collectors.toList());
         if (sharedItems.isEmpty()) {
             sharedItems = placeholderContents;
         }

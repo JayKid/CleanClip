@@ -22,9 +22,12 @@ import java.util.List;
 
 public class TabFast extends Activity {
 
-    String cleanUrl = "";
     SharedItemsStore store;
+
+    // Currently displayed item
+    String cleanUrl = "";
     Boolean needsPersisting = false;
+    WebInfo resolvedContents = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +43,6 @@ public class TabFast extends Activity {
             cleanUrl = stripQueryParameters(clipboardURL);
 
             if (!cleanUrl.isEmpty()) {
-
                 startUnfurling(cleanUrl);
 
                 TextView clipboardLinkLabel = findViewById(R.id.clipboardLinkLabel);
@@ -78,7 +80,7 @@ public class TabFast extends Activity {
         shareButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (!cleanUrl.isEmpty()) {
-                    store.addSharedItem(cleanUrl);
+                    store.addSharedItem(cleanUrl, resolvedContents == null, resolvedContents);
                     needsPersisting = true;
                     startShareUrl(cleanUrl);
                 }
@@ -95,6 +97,10 @@ public class TabFast extends Activity {
         super.onPause();
     }
 
+    private void updateSharedItem(WebInfo resolvedContents) {
+        this.resolvedContents = resolvedContents;
+    }
+
     private void startUnfurling(String url) {
 
         TextCrawler textCrawler = new TextCrawler();
@@ -108,8 +114,9 @@ public class TabFast extends Activity {
             @Override
             public void onPos(SourceContent sourceContent, boolean b) {
 
-                WebInfo webInfo = extractWebsiteContents(sourceContent);
-                setPreviewFromExtractedContent(webInfo);
+                WebInfo resolvedContents = extractWebsiteContents(sourceContent);
+                updateSharedItem(resolvedContents);
+                setPreviewFromExtractedContent(resolvedContents);
             }
         };
 
