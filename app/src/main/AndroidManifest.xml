@@ -3,6 +3,7 @@
     package="com.kid.jay.cleanclip">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -24,7 +25,19 @@
         <activity
             android:name=".TabHistory"
             android:label="@string/title_activity_tab_history"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ShareActivity"
+            android:label="@string/title_activity_share"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="text/html"/>
+                <data android:mimeType="text/plain"/>
+            </intent-filter>
+
+        </activity>
     </application>
 
 </manifest>
