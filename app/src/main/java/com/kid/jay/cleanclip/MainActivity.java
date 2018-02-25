@@ -18,7 +18,9 @@ public class MainActivity extends ActivityGroup {
         tabHost.setup(this.getLocalActivityManager());
 
         SharedItemsStore store = SharedItemsStore.getInstance();
-        store.initialize(this);
+        if (!SharedItemsStore.isInitialized()) {
+            store.initialize(this);
+        }
 
         TabHost.TabSpec spec = tabHost.newTabSpec("TabFast");
         spec.setContent(new Intent(this,TabFast.class));
