@@ -19,11 +19,17 @@ public class ShareActivity extends Activity implements AdapterView.OnItemClickLi
     private ListView listView;
     private ArrayAdapter<String> arrayAdapter;
     private List<String> placeholderContents = Arrays.asList("You", "Never", "Shared", "Anything");
+    private SharedItemsStore store;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_share);
+
+        store = SharedItemsStore.getInstance();
+        if (!SharedItemsStore.isInitialized()) {
+            store.initialize(this);
+        }
     }
 
     @Override
@@ -81,6 +87,7 @@ public class ShareActivity extends Activity implements AdapterView.OnItemClickLi
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long longId) {
         String link = (String) parent.getAdapter().getItem(position);
+        store.addSharedItem(link, false, null);
         startShareUrl(link);
     }
 }

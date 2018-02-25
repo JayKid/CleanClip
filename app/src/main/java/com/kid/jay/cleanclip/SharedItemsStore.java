@@ -11,14 +11,20 @@ public class SharedItemsStore {
     private static SharedItemsStore instance = new SharedItemsStore();
     private List<SharedItem> sharedItems = new ArrayList<>();
     private Storage storage;
+    private static boolean isInitialized = false;
 
     public void initialize(Context context) {
         storage = new Storage(context);
         sharedItems = storage.fetchSharedItemsFromFileSystem();
+        isInitialized = true;
     }
 
     public static SharedItemsStore getInstance() {
         return instance;
+    }
+
+    public static boolean isInitialized() {
+        return isInitialized;
     }
 
     public SharedItem getSharedItemByURL(String sharedItemURL) {
