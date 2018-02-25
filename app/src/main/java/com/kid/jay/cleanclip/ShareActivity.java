@@ -2,7 +2,6 @@ package com.kid.jay.cleanclip;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
